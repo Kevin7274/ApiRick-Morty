@@ -1,5 +1,4 @@
 const urlBase = 'https://rickandmortyapi.com/api/character';
-
 const loadData = (urlBase, page = 1) => {
     const url = `${urlBase}?page=${page}`;
 fetch(url)
@@ -65,6 +64,55 @@ const navegacion = (e) => {
     }
 }
 
+const modalbody = (personaje) => {
+    const div =document.createElement('div');
+    let html = `
+    
+  "info": {
+    "count": 29,
+    "pages": 2,
+    "next": "https://rickandmortyapi.com/api/character/?page=2&name=rick&status=alive",
+    "prev": null
+  },
+  "results": [
+    {
+      "id": 1,
+      "name": "Rick Sanchez",
+      "status": "Alive",
+      "species": "Human",
+      "type": "",
+      "gender": "Male",
+      "origin": {
+        "name": "Earth",
+        "url": "https://rickandmortyapi.com/api/location/1"
+      },
+      "location": {
+        "name": "Earth",
+        "url": "https://rickandmortyapi.com/api/location/20"
+      },
+      "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+      "episode": [
+        "https://rickandmortyapi.com/api/episode/1",
+        "https://rickandmortyapi.com/api/episode/2",
+        return image;
+      ],
+      "url": "https://rickandmortyapi.com/api/character/1",
+      "created": "2017-11-04T18:48:46.250Z"
+    },`;
+    div.innerHTML = html;
+    return div(personaje);
+
+}
+
+const showCharacterById = (id) => {
+    const urlId = `${urlBase}${id}`;
+    fetch(urlId)
+    .then(result => result.json())
+    .then(character => {
+        console.log(character);
+        return modalbody(character);
+    });
+}
 const loadInfo = (e) => {
     e.preventDefault();
     if(e.target.classList.contains('btn')){
@@ -73,8 +121,10 @@ const loadInfo = (e) => {
         modalContent.appendChild(spinner());
         setTimeout(() => {
             modalContent.removeChild(modalContent.firstChild);
-            const content = document.createElement('div');
-            content.innerHTML = '<h2>HI FOOKer</h2>';
+            //const content = document.createElement('div');
+            const id = e.target.getAttribute('data-id');
+            //content.innerHTML = `<h2>Id ${id} </h2>`;
+            const content = showCharacterById(id);
             modalContent.appendChild(content);
         }, 3000);
     }
