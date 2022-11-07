@@ -1,4 +1,4 @@
-const urlBase = 'https://rickandmortyapi.com/api/character';
+const urlBase = 'https://rickandmortyapi.com/api/character/';
 const loadData = (urlBase, page = 1) => {
     const url = `${urlBase}?page=${page}`;
 fetch(url)
@@ -66,41 +66,14 @@ const navegacion = (e) => {
 
 const modalbody = (personaje) => {
     const div =document.createElement('div');
-    let html = `
-    
-  "info": {
-    "count": 29,
-    "pages": 2,
-    "next": "https://rickandmortyapi.com/api/character/?page=2&name=rick&status=alive",
-    "prev": null
-  },
-  "results": [
-    {
-      "id": 1,
-      "name": "Rick Sanchez",
-      "status": "Alive",
-      "species": "Human",
-      "type": "",
-      "gender": "Male",
-      "origin": {
-        "name": "Earth",
-        "url": "https://rickandmortyapi.com/api/location/1"
-      },
-      "location": {
-        "name": "Earth",
-        "url": "https://rickandmortyapi.com/api/location/20"
-      },
-      "image": "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-      "episode": [
-        "https://rickandmortyapi.com/api/episode/1",
-        "https://rickandmortyapi.com/api/episode/2",
-        return image;
-      ],
-      "url": "https://rickandmortyapi.com/api/character/1",
-      "created": "2017-11-04T18:48:46.250Z"
-    },`;
-    div.innerHTML = html;
-    return div(personaje);
+    div.classList.add('text-center');
+    let html = ``;
+    html += `<img src="${personaje.image}">`;
+    html += `<p>${personaje.status} - ${personaje.species}</p>`;
+    html += `<p> Última ubicacion conocida</p><p>${personaje.origin.name}</p>`;
+    html += `<p> Ha aparecido en ${personaje.episode.length} Episodios</p>`;
+    div.innerHTML    = html;
+    return div;
 
 }
 
@@ -109,8 +82,15 @@ const showCharacterById = (id) => {
     fetch(urlId)
     .then(result => result.json())
     .then(character => {
+        const modalContent = document.querySelector('.modal-body');
+        document.querySelector('.modal-title').innerText = character.name;
         console.log(character);
-        return modalbody(character);
+        console.log(character.image);
+        console.log(character.status);
+        console.log(character.origin.name);
+        console.log(character.species);
+        console.log(character.episode.length);
+        modalContent.appendChild(modalbody(character));
     });
 }
 const loadInfo = (e) => {
@@ -124,8 +104,7 @@ const loadInfo = (e) => {
             //const content = document.createElement('div');
             const id = e.target.getAttribute('data-id');
             //content.innerHTML = `<h2>Id ${id} </h2>`;
-            const content = showCharacterById(id);
-            modalContent.appendChild(content);
+            showCharacterById(id);
         }, 3000);
     }
 }
